@@ -167,6 +167,11 @@ api_container |  * Debugger PIN: 131-979-641
 
 Então já pode acessar a aplicação no endereço http://localhost:3000 e testar as funcionalidades.
 
+## Recursos Extras
+1. Esse projeto também utiliza o Adminer 4.8.0, então caso queira visualizar a base de dados, basta acessar http://localhost:8080/ e inserir os dados de acesso ao banco contindos no docker-compose.
+2. Esse projeto utiliza dados mockados, criados no https://www.mockaroo.com/
+3. A base de dados é criação utilizando migrations.
+
 ## Modelo ER do Bando de Dados
 
 ![Modelo ER do Bando de Dados](https://raw.githubusercontent.com/guther/eldorado_challenge/main/app/db/db_schema.jpg "Modelo ER do Bando de Dados")
