@@ -113,7 +113,7 @@ class Costumers(FlaskView):
                                     address,
                                     postal_code,
                                     complement)
-            VALUES ( % s, % s, % s, % s, % s, % s, % s, % s, % s, % s, % s) RETURNING id;
+            VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;
                         """
             try:
                 cursor.execute(

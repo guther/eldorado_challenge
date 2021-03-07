@@ -31,14 +31,18 @@
 
     var searchInputDropdownCliente, dropdownMenuCliente;
 
-    onMount(() => {
+    onMount(async () => {
         document.querySelectorAll(".form-outline").forEach((formOutline) => {
-            if (mdb) new mdb.Input(formOutline).init();
+            if (typeof mdb != "undefined") new mdb.Input(formOutline).init();
         });
         searchInputDropdownCliente = document.querySelector("#inputSearchCostumer");
         VMasker(searchInputDropdownCliente).maskPattern("999.999.999-99");
         dropdownMenuCliente = searchInputDropdownCliente.parentNode.querySelector(".dropdown-menu");
         document.querySelector("#form_new_order").addEventListener("submit", formSubmit);
+
+        let slug = "http://localhost:5000/book/";
+        let aux = await fetch(slug);
+        books = await aux.json();
     });
 
     const formSubmit = (e) => {
@@ -504,6 +508,9 @@
         margin-top: 20px;
         clear: left;
         width: 100%;
+    }
+    .select-livro .form-select {
+        max-width: 450px;
     }
     fieldset .advice {
         text-align: center;

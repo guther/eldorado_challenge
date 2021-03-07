@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS tb_order_details;
+DROP TABLE IF EXISTS tb_orders;
+DROP TABLE IF EXISTS tb_costumers;
+DROP TABLE IF EXISTS tb_cities;
+DROP TABLE IF EXISTS tb_products;
+DROP TABLE IF EXISTS tb_genres;
+DROP TABLE IF EXISTS tb_states;
