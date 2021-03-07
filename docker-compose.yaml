@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+  db:
+    container_name: postgres_container
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=db_bookstore
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=abc123
+      - TZ=America/Manaus
+    volumes:
+      - type: bind
+        source: ./api/data/migrations
+        target: /home/api/data/migrations
+      - type: volume
+        source: db-data
+        target: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  api:
+    container_name: api_container
+    image: python:3.9.2
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: ./api
+        target: /home/api
+      - type: bind
+        source: ./requirements.txt
+        target: /home/requirements.txt
+    working_dir: /home/api
+    ports:
+      - 5000:5000
+    environment:
+      - PYTHONUNBUFFERED=1
+      - POSTGRES_DB=db_bookstore
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=abc123
+    command: bash -c "chmod +x ./bash/*.sh
+      ; ./bash/wait-for-it.sh -t 60 db:5432
+      ; ./bash/migrations.sh
+      ; pip install --user -r /home/requirements.txt
+      ; python -u server.py"
+
+  app:
+    image: node:latest
+    container_name: app_container
+    working_dir: /home/node/app
+    ports:
+      - "3000:3000"
+      - "10000:10000"
+    volumes:
+      - type: bind
+        source: ./app
+        target: /home/node/app
+    command: bash -c "
+      npm install
+      ; npm run dev
+      ; tail -f /dev/null"
+volumes:
+  db-data:
