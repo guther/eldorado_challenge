@@ -116,7 +116,7 @@ Existem 02 tipos de recuperação de informação de vendas cadastradas, sendo e
    - Endpoint: http://localhost:5000/sale/8
    - Retorna: JSON com o registro da venda de id igual a 8
    - Método: GET
-   - 
+
 ## Funcionalidade 7: Um cliente pode comprar no máximo até 10 livros **`diferentes`** por venda realizada
 Essa restrição foi implementada no/na:
 - API: os dados passam por uma rotina de validação que impõe a restrição. Essa rotina organiza os dados e une dados de um mesmo produto, garantindo que somente diferentes livros serão contabilizados, ou seja:

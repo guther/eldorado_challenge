@@ -73,7 +73,10 @@ class Products(FlaskView):
         try:
             id = int(id)
         except ValueError as error:
-            return json.dumps(error)
+            return ({
+                "code": 400,
+                "description": str(error)
+            }, 400)
 
         connection = Connection()
         cursor = connection.con.cursor(cursor_factory=NamedTupleCursor)

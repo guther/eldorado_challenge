@@ -1,17 +1,39 @@
 from src.utils import Utils
-from flask import request
+from flask import request, jsonify
 from flask_classful import FlaskView
 from src.db import Connection
 from psycopg2.extras import NamedTupleCursor
-import json
 
 
 class Orders(FlaskView):
 
     def index(self):
         # list all
-        # http://localhost:5000/
-        return "<h1>Order This is my indexpage</h1>"
+        connection = Connection()
+        cursor = connection.con.cursor(cursor_factory=NamedTupleCursor)
+        try:
+            cursor.execute(
+                "SELECT * FROM tb_orders ORDER BY id;")
+        except Exception as err:
+            connection.print_psycopg2_exception(err)
+            return ({
+                "code": 500,
+                "description": str(err)
+            }, 500)
+
+        orders = cursor.fetchall()
+        data = []
+
+        for order in orders:
+            data.append({
+                "id": order.id,
+                "id_costumer": order.id_costumer,
+                "discount": order.discount,
+                "order_date": order.order_date,
+            })
+        cursor.close()
+        connection.con.close()
+        return jsonify(data)
 
     def __delete_order(self, id_order):
         connection = Connection()
@@ -141,7 +163,32 @@ class Orders(FlaskView):
 
     def get(self, id):
         # get specific
-        return "<h1>Order This is my indexpage GET</h1>"
+        try:
+            id = int(id)
+        except ValueError as error:
+            return ({
+                "code": 400,
+                "description": str(error)
+            }, 400)
+
+        connection = Connection()
+        cursor = connection.con.cursor(cursor_factory=NamedTupleCursor)
+        sql_string = "SELECT * FROM tb_orders WHERE id=%s;"
+        try:
+            cursor.execute(sql_string, (id,))
+        except Exception as err:
+            connection.print_psycopg2_exception(err)
+            return ({
+                "code": 500,
+                "description": "Internal Server Error"
+            }, 500)
+
+        order = cursor.fetchone()
+
+        cursor.close()
+        connection.con.close()
+
+        return jsonify(order) if order else {}
 
 
 def sale_data_sanitization(data):
