@@ -1,4 +1,4 @@
-Flask==1.1.2
+Flask==2.2.5
 flask-classful
 psycopg2==2.8.6
 simplejson==3.17.2
